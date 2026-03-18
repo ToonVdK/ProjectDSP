@@ -83,7 +83,7 @@ class MainWindow(widget.QMainWindow):
         inner_hbox3.addWidget(derive_BP)
         inner_hbox3.addWidget(bp_value)
         outer_vbox2.addWidget(export_data)
-        
+
         central_widget = widget.QWidget()
         central_widget.setLayout(outer_hbox)
         self.setCentralWidget(central_widget)
