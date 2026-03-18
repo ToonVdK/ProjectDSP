@@ -44,9 +44,6 @@ class MainWindow(widget.QMainWindow):
         # Structure layout
         outer_hbox.addLayout(outer_vbox1)
         outer_hbox.addLayout(outer_vbox2)
-        outer_vbox2.addLayout(inner_hbox1)
-        outer_vbox2.addLayout(inner_hbox2)
-        outer_vbox2.addLayout(inner_hbox3)
 
         # Object definition
         load_data = widget.QPushButton("Load data")
@@ -76,14 +73,17 @@ class MainWindow(widget.QMainWindow):
         outer_vbox1.addStretch()
         outer_vbox2.addWidget(preprocess_data)
         outer_vbox2.addWidget(preprocess_state)
+        outer_vbox2.addLayout(inner_hbox1)
         inner_hbox1.addWidget(calculate_pat)
         inner_hbox1.addWidget(calculate_ptt)
+        outer_vbox2.addLayout(inner_hbox2)
         inner_hbox2.addWidget(pat_value)
         inner_hbox2.addWidget(ptt_value)
+        outer_vbox2.addLayout(inner_hbox3)
         inner_hbox3.addWidget(derive_BP)
         inner_hbox3.addWidget(bp_value)
         outer_vbox2.addWidget(export_data)
-
+        
         central_widget = widget.QWidget()
         central_widget.setLayout(outer_hbox)
         self.setCentralWidget(central_widget)
