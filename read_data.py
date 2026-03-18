@@ -1,4 +1,4 @@
-"""
+r"""
 Example usage:
 > python read_data.py -d C:\Users\vande\PycharmProjects\DSP\ProjectBPAnalysis\data\ -p p000188 -i 1 -s abp -g
 """
