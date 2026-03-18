@@ -1,0 +1,238 @@
+Index: application.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import PyQt6 as qt\r\nimport PyQt6.QtWidgets as widget\r\n\r\n# Only needed for access to command line arguments\r\nimport sys\r\n\r\n# You need one (and only one) QApplication instance per application.\r\n# Pass in sys.argv to allow command line arguments for your app.\r\n# If you know you won't use command line arguments QApplication([]) works too.\r\n\r\nclass MainWindow(widget.QMainWindow):\r\n    def __init__(self):\r\n        widget.QMainWindow.__init__(self)\r\n\r\n        self.setWindowTitle(\"HeartBP\")\r\n        # self.showFullScreen()\r\n        self.setFixedSize(800, 600)\r\n        button = widget.QPushButton(\"Start\")\r\n        button.setCheckable(True)\r\n        button.clicked.connect(self.buttonPressed())\r\n\r\n        #set central object of window\r\n        self.setCentralWidget(button)\r\n\r\n    def buttonPressed(self):\r\n        print(\"Button pressed\")\r\n\r\napp = widget.QApplication(sys.argv)\r\n\r\n# Create a Qt widget, which will be our window.\r\nwindow = MainWindow()\r\nwindow.show()  # IMPORTANT!!!!! Windows are hidden by default.\r\n\r\n# Start the event loop.\r\napp.exec()\r\n\r\n\r\n# Your application won't reach here until you exit and the event\r\n# loop has stopped.\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/application.py b/application.py
+--- a/application.py	(revision 40ed4c1811330fec9fadf91c8fcf899d3f9b8dbf)
++++ b/application.py	(date 1773842598404)
+@@ -1,5 +1,6 @@
+ import PyQt6 as qt
+ import PyQt6.QtWidgets as widget
++import PyQt6.QtGui as gui
+ 
+ # Only needed for access to command line arguments
+ import sys
+@@ -16,8 +17,7 @@
+         # self.showFullScreen()
+         self.setFixedSize(800, 600)
+         button = widget.QPushButton("Start")
+-        button.setCheckable(True)
+-        button.clicked.connect(self.buttonPressed())
++        button.clicked.connect(self.buttonPressed)
+ 
+         #set central object of window
+         self.setCentralWidget(button)
+@@ -26,6 +26,9 @@
+         print("Button pressed")
+ 
+ app = widget.QApplication(sys.argv)
++app.setApplicationName("HeartBP")
++app.setApplicationVersion("1.0")
++app.setWindowIcon(gui.QIcon("img/icon.png"))
+ 
+ # Create a Qt widget, which will be our window.
+ window = MainWindow()
+Index: .idea/misc.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"Black\">\r\n    <option name=\"sdkName\" value=\"Python 3.13 (ProjectBPAnalysis)\" />\r\n  </component>\r\n  <component name=\"ProjectRootManager\" version=\"2\" project-jdk-name=\"Python 3.13 (ProjectBPAnalysis)\" project-jdk-type=\"Python SDK\" />\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/misc.xml b/.idea/misc.xml
+--- a/.idea/misc.xml	(revision 40ed4c1811330fec9fadf91c8fcf899d3f9b8dbf)
++++ b/.idea/misc.xml	(date 1773842598397)
+@@ -1,7 +1,7 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+   <component name="Black">
+-    <option name="sdkName" value="Python 3.13 (ProjectBPAnalysis)" />
++    <option name="sdkName" value="Python 3.13 (ProjectDSP)" />
+   </component>
+-  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (ProjectBPAnalysis)" project-jdk-type="Python SDK" />
++  <component name="ProjectRootManager" version="2" project-jdk-name="Python 3.13 (ProjectDSP)" project-jdk-type="Python SDK" />
+ </project>
+\ No newline at end of file
+Index: .idea/workspace.xml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<project version=\"4\">\r\n  <component name=\"AutoImportSettings\">\r\n    <option name=\"autoReloadType\" value=\"SELECTIVE\" />\r\n  </component>\r\n  <component name=\"ChangeListManager\">\r\n    <list default=\"true\" id=\"2761cb92-69f9-41d9-be83-ad1ee71f7df0\" name=\"Changes\" comment=\"Intial Commit\">\r\n      <change afterPath=\"$PROJECT_DIR$/extract_features.py\" afterDir=\"false\" />\r\n      <change afterPath=\"$PROJECT_DIR$/main.py\" afterDir=\"false\" />\r\n      <change beforePath=\"$PROJECT_DIR$/.idea/workspace.xml\" beforeDir=\"false\" afterPath=\"$PROJECT_DIR$/.idea/workspace.xml\" afterDir=\"false\" />\r\n    </list>\r\n    <option name=\"SHOW_DIALOG\" value=\"false\" />\r\n    <option name=\"HIGHLIGHT_CONFLICTS\" value=\"true\" />\r\n    <option name=\"HIGHLIGHT_NON_ACTIVE_CHANGELIST\" value=\"false\" />\r\n    <option name=\"LAST_RESOLUTION\" value=\"IGNORE\" />\r\n  </component>\r\n  <component name=\"FileTemplateManagerImpl\">\r\n    <option name=\"RECENT_TEMPLATES\">\r\n      <list>\r\n        <option value=\"Python Script\" />\r\n      </list>\r\n    </option>\r\n  </component>\r\n  <component name=\"Git.Settings\">\r\n    <option name=\"RECENT_GIT_ROOT_PATH\" value=\"$PROJECT_DIR$\" />\r\n  </component>\r\n  <component name=\"GitHubPullRequestSearchHistory\"><![CDATA[{\r\n  \"lastFilter\": {\r\n    \"state\": \"OPEN\",\r\n    \"assignee\": \"ToonVdK\"\r\n  }\r\n}]]></component>\r\n  <component name=\"GithubPullRequestsUISettings\"><![CDATA[{\r\n  \"selectedUrlAndAccountId\": {\r\n    \"url\": \"https://github.com/ToonVdK/ProjectDSP\",\r\n    \"accountId\": \"6fe9b9cc-bf15-42d4-839e-63f074c5ecdf\"\r\n  }\r\n}]]></component>\r\n  <component name=\"ProjectColorInfo\">{\r\n  &quot;associatedIndex&quot;: 2\r\n}</component>\r\n  <component name=\"ProjectId\" id=\"3ATvz2p244iL7GfHhJ4sDPpV9N4\" />\r\n  <component name=\"ProjectViewState\">\r\n    <option name=\"hideEmptyMiddlePackages\" value=\"true\" />\r\n    <option name=\"showLibraryContents\" value=\"true\" />\r\n  </component>\r\n  <component name=\"PropertiesComponent\"><![CDATA[{\r\n  \"keyToString\": {\r\n    \"ModuleVcsDetector.initialDetectionPerformed\": \"true\",\r\n    \"Python.preprocess.executor\": \"Run\",\r\n    \"Python.read_data.executor\": \"Run\",\r\n    \"RunOnceActivity.ShowReadmeOnStart\": \"true\",\r\n    \"RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252\": \"true\",\r\n    \"RunOnceActivity.git.unshallow\": \"true\",\r\n    \"git-widget-placeholder\": \"main\",\r\n    \"last_opened_file_path\": \"C:/Users/vande/PycharmProjects/DSP/ProjectBPAnalysis\"\r\n  }\r\n}]]></component>\r\n  <component name=\"RecentsManager\">\r\n    <key name=\"CopyFile.RECENT_KEYS\">\r\n      <recent name=\"C:\\Users\\vande\\PycharmProjects\\DSP\\ProjectBPAnalysis\" />\r\n    </key>\r\n  </component>\r\n  <component name=\"SharedIndexes\">\r\n    <attachedChunks>\r\n      <set>\r\n        <option value=\"bundled-python-sdk-1f77c24022e5-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.26830.99\" />\r\n      </set>\r\n    </attachedChunks>\r\n  </component>\r\n  <component name=\"TaskManager\">\r\n    <task active=\"true\" id=\"Default\" summary=\"Default task\">\r\n      <changelist id=\"2761cb92-69f9-41d9-be83-ad1ee71f7df0\" name=\"Changes\" comment=\"\" />\r\n      <created>1772629633900</created>\r\n      <option name=\"number\" value=\"Default\" />\r\n      <option name=\"presentableId\" value=\"Default\" />\r\n      <updated>1772629633900</updated>\r\n    </task>\r\n    <task id=\"LOCAL-00001\" summary=\"Intial Commit\">\r\n      <option name=\"closed\" value=\"true\" />\r\n      <created>1772629808919</created>\r\n      <option name=\"number\" value=\"00001\" />\r\n      <option name=\"presentableId\" value=\"LOCAL-00001\" />\r\n      <option name=\"project\" value=\"LOCAL\" />\r\n      <updated>1772629808919</updated>\r\n    </task>\r\n    <option name=\"localTasksCounter\" value=\"2\" />\r\n    <servers />\r\n  </component>\r\n  <component name=\"Vcs.Log.Tabs.Properties\">\r\n    <option name=\"TAB_STATES\">\r\n      <map>\r\n        <entry key=\"MAIN\">\r\n          <value>\r\n            <State />\r\n          </value>\r\n        </entry>\r\n      </map>\r\n    </option>\r\n  </component>\r\n  <component name=\"VcsManagerConfiguration\">\r\n    <MESSAGE value=\"Intial Commit\" />\r\n    <option name=\"LAST_COMMIT_MESSAGE\" value=\"Intial Commit\" />\r\n  </component>\r\n</project>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/workspace.xml b/.idea/workspace.xml
+--- a/.idea/workspace.xml	(revision 40ed4c1811330fec9fadf91c8fcf899d3f9b8dbf)
++++ b/.idea/workspace.xml	(date 1773842611963)
+@@ -1,13 +1,10 @@
+ <?xml version="1.0" encoding="UTF-8"?>
+ <project version="4">
+-  <component name="AutoImportSettings">
+-    <option name="autoReloadType" value="SELECTIVE" />
+-  </component>
+   <component name="ChangeListManager">
+-    <list default="true" id="2761cb92-69f9-41d9-be83-ad1ee71f7df0" name="Changes" comment="Intial Commit">
+-      <change afterPath="$PROJECT_DIR$/extract_features.py" afterDir="false" />
+-      <change afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
+-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
++    <list default="true" id="2761cb92-69f9-41d9-be83-ad1ee71f7df0" name="Changes" comment="">
++      <change afterPath="$PROJECT_DIR$/img/heartBP.png" afterDir="false" />
++      <change afterPath="$PROJECT_DIR$/img/icon.png" afterDir="false" />
++      <change beforePath="$PROJECT_DIR$/application.py" beforeDir="false" afterPath="$PROJECT_DIR$/application.py" afterDir="false" />
+     </list>
+     <option name="SHOW_DIALOG" value="false" />
+     <option name="HIGHLIGHT_CONFLICTS" value="true" />
+@@ -24,18 +21,6 @@
+   <component name="Git.Settings">
+     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+   </component>
+-  <component name="GitHubPullRequestSearchHistory"><![CDATA[{
+-  "lastFilter": {
+-    "state": "OPEN",
+-    "assignee": "ToonVdK"
+-  }
+-}]]></component>
+-  <component name="GithubPullRequestsUISettings"><![CDATA[{
+-  "selectedUrlAndAccountId": {
+-    "url": "https://github.com/ToonVdK/ProjectDSP",
+-    "accountId": "6fe9b9cc-bf15-42d4-839e-63f074c5ecdf"
+-  }
+-}]]></component>
+   <component name="ProjectColorInfo">{
+   &quot;associatedIndex&quot;: 2
+ }</component>
+@@ -44,27 +29,55 @@
+     <option name="hideEmptyMiddlePackages" value="true" />
+     <option name="showLibraryContents" value="true" />
+   </component>
+-  <component name="PropertiesComponent"><![CDATA[{
+-  "keyToString": {
+-    "ModuleVcsDetector.initialDetectionPerformed": "true",
+-    "Python.preprocess.executor": "Run",
+-    "Python.read_data.executor": "Run",
+-    "RunOnceActivity.ShowReadmeOnStart": "true",
+-    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+-    "RunOnceActivity.git.unshallow": "true",
+-    "git-widget-placeholder": "main",
+-    "last_opened_file_path": "C:/Users/vande/PycharmProjects/DSP/ProjectBPAnalysis"
++  <component name="PropertiesComponent">{
++  &quot;keyToString&quot;: {
++    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
++    &quot;Python.Data Reader.executor&quot;: &quot;Run&quot;,
++    &quot;Python.application.executor&quot;: &quot;Run&quot;,
++    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
++    &quot;RunOnceActivity.typescript.service.memoryLimit.init&quot;: &quot;true&quot;,
++    &quot;ai.playground.ignore.import.keys.banner.in.settings&quot;: &quot;true&quot;,
++    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
++    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
++    &quot;last_opened_file_path&quot;: &quot;C:/Users/dgam3/DocumentsOffline/Unif/3e jaar/6-DSP/ProjectDSP&quot;,
++    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
++    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+   }
+-}]]></component>
+-  <component name="RecentsManager">
+-    <key name="CopyFile.RECENT_KEYS">
+-      <recent name="C:\Users\vande\PycharmProjects\DSP\ProjectBPAnalysis" />
+-    </key>
++}</component>
++  <component name="RunManager">
++    <configuration name="Data Reader" type="PythonConfigurationType" factoryName="Python">
++      <module name="ProjectBPAnalysis" />
++      <option name="ENV_FILES" value="" />
++      <option name="INTERPRETER_OPTIONS" value="" />
++      <option name="PARENT_ENVS" value="true" />
++      <envs>
++        <env name="PYTHONUNBUFFERED" value="1" />
++      </envs>
++      <option name="SDK_HOME" value="" />
++      <option name="SDK_NAME" value="Python 3.13 (ProjectDSP)" />
++      <option name="WORKING_DIRECTORY" value="" />
++      <option name="IS_MODULE_SDK" value="false" />
++      <option name="ADD_CONTENT_ROOTS" value="true" />
++      <option name="ADD_SOURCE_ROOTS" value="true" />
++      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
++      <option name="RUN_TOOL" value="" />
++      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/read_data.py" />
++      <option name="PARAMETERS" value="-d data -p p000188 -i 1 -s abp -g" />
++      <option name="SHOW_COMMAND_LINE" value="false" />
++      <option name="EMULATE_TERMINAL" value="false" />
++      <option name="MODULE_MODE" value="false" />
++      <option name="REDIRECT_INPUT" value="false" />
++      <option name="INPUT_FILE" value="" />
++      <method v="2" />
++    </configuration>
+   </component>
+   <component name="SharedIndexes">
+     <attachedChunks>
+       <set>
+-        <option value="bundled-python-sdk-1f77c24022e5-d902c0275401-com.jetbrains.pycharm.community.sharedIndexes.bundled-PC-252.26830.99" />
++        <option value="bundled-js-predefined-d6986cc7102b-9b0f141eb926-JavaScript-PY-253.31033.139" />
++        <option value="bundled-python-sdk-2653e85de345-6d6dccd035ac-com.jetbrains.pycharm.pro.sharedIndexes.bundled-PY-253.31033.139" />
+       </set>
+     </attachedChunks>
+   </component>
+@@ -75,31 +88,15 @@
+       <option name="number" value="Default" />
+       <option name="presentableId" value="Default" />
+       <updated>1772629633900</updated>
+-    </task>
+-    <task id="LOCAL-00001" summary="Intial Commit">
+-      <option name="closed" value="true" />
+-      <created>1772629808919</created>
+-      <option name="number" value="00001" />
+-      <option name="presentableId" value="LOCAL-00001" />
+-      <option name="project" value="LOCAL" />
+-      <updated>1772629808919</updated>
++      <workItem from="1773838344767" duration="3144000" />
+     </task>
+-    <option name="localTasksCounter" value="2" />
+     <servers />
+   </component>
+-  <component name="Vcs.Log.Tabs.Properties">
+-    <option name="TAB_STATES">
+-      <map>
+-        <entry key="MAIN">
+-          <value>
+-            <State />
+-          </value>
+-        </entry>
+-      </map>
+-    </option>
++  <component name="TypeScriptGeneratedFilesManager">
++    <option name="version" value="3" />
+   </component>
+-  <component name="VcsManagerConfiguration">
+-    <MESSAGE value="Intial Commit" />
+-    <option name="LAST_COMMIT_MESSAGE" value="Intial Commit" />
++  <component name="com.intellij.coverage.CoverageDataManagerImpl">
++    <SUITE FILE_PATH="coverage/ProjectDSP$application.coverage" NAME="application Coverage Results" MODIFIED="1773842246728" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$" />
++    <SUITE FILE_PATH="coverage/ProjectDSP$Data_Reader.coverage" NAME="Data Reader Coverage Results" MODIFIED="1773841850704" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="" />
+   </component>
+ </project>
+\ No newline at end of file
+Index: .idea/ProjectBPAnalysis.iml
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+><?xml version=\"1.0\" encoding=\"UTF-8\"?>\r\n<module type=\"PYTHON_MODULE\" version=\"4\">\r\n  <component name=\"NewModuleRootManager\">\r\n    <content url=\"file://$MODULE_DIR$\">\r\n      <excludeFolder url=\"file://$MODULE_DIR$/.venv\" />\r\n    </content>\r\n    <orderEntry type=\"jdk\" jdkName=\"Python 3.13 (ProjectBPAnalysis)\" jdkType=\"Python SDK\" />\r\n    <orderEntry type=\"sourceFolder\" forTests=\"false\" />\r\n  </component>\r\n</module>
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/.idea/ProjectBPAnalysis.iml b/.idea/ProjectBPAnalysis.iml
+--- a/.idea/ProjectBPAnalysis.iml	(revision 40ed4c1811330fec9fadf91c8fcf899d3f9b8dbf)
++++ b/.idea/ProjectBPAnalysis.iml	(date 1773842598395)
+@@ -3,8 +3,9 @@
+   <component name="NewModuleRootManager">
+     <content url="file://$MODULE_DIR$">
+       <excludeFolder url="file://$MODULE_DIR$/.venv" />
++      <excludeFolder url="file://$MODULE_DIR$/venv" />
+     </content>
+-    <orderEntry type="jdk" jdkName="Python 3.13 (ProjectBPAnalysis)" jdkType="Python SDK" />
++    <orderEntry type="jdk" jdkName="Python 3.13 (ProjectDSP)" jdkType="Python SDK" />
+     <orderEntry type="sourceFolder" forTests="false" />
+   </component>
+ </module>
+\ No newline at end of file
