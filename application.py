@@ -1,5 +1,6 @@
 import PyQt6 as qt
 import PyQt6.QtWidgets as widget
+import PyQt6.QtGui as gui
 
 # Only needed for access to command line arguments
 import sys
@@ -16,8 +17,7 @@ class MainWindow(widget.QMainWindow):
         # self.showFullScreen()
         self.setFixedSize(800, 600)
         button = widget.QPushButton("Start")
-        button.setCheckable(True)
-        button.clicked.connect(self.buttonPressed())
+        button.clicked.connect(self.buttonPressed)
 
         #set central object of window
         self.setCentralWidget(button)
@@ -26,6 +26,9 @@ class MainWindow(widget.QMainWindow):
         print("Button pressed")
 
 app = widget.QApplication(sys.argv)
+app.setApplicationName("HeartBP")
+app.setApplicationVersion("1.0")
+app.setWindowIcon(gui.QIcon("img/icon.png"))
 
 # Create a Qt widget, which will be our window.
 window = MainWindow()
