@@ -24,10 +24,14 @@ def showBP(dbPath, patient, idx):
     print(f'SBP = {sbp} mmHg\nDBP = {dbp} mmHg')
 
 
-def plotWaves(dbPath, patient, idx):
+def plotWaves(dbPath, patient, idx, signal):
     "Plots first 5 seconds of waveforms"
     print(f'\nFirst 5 seconds of waveforms\n')
-    waves = ['abp', 'ecg', 'ppg', 'resp']
+    if signal == 'all':
+        waves = ['abp', 'ecg', 'ppg', 'resp']
+    else:
+        waves = [signal]
+
     for wav in waves:
         wave_fn = patient + '_' + wav + '.npy'
         wave = np.load(os.path.join(dbPath, wave_fn))
@@ -59,6 +63,8 @@ if __name__ == '__main__':
             required=True)
     parser.add_argument('-i', '--idx', type=int, help='segment index',
             required=True)
+    parser.add_argument('-s', '--signal', help='type of signal',
+            required=True)
     parser.add_argument('-g', '--graph', action='store_true',
             help='flag for graphs')
     args = parser.parse_args()
@@ -66,4 +72,4 @@ if __name__ == '__main__':
     showBP(args.dbPath, args.patient, args.idx)
 
     if args.graph:
-        plotWaves(args.dbPath, args.patient, args.idx)
+        plotWaves(args.dbPath, args.patient, args.idx, args.signal)
