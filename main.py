@@ -1,3 +1,7 @@
+r"""
+Example usage:
+>  python main.py -d C:\Users\vande\PycharmProjects\DSP\ProjectBPAnalysis\data\ -p p000188 -i 1
+"""
 import os
 import argparse
 import numpy as np
