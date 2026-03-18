@@ -1,6 +1,6 @@
 """
 Example usage:
-> python read_data.py -d <path to .npy files> -p p093833 -i 29 -g
+> python read_data.py -d C:\Users\vande\PycharmProjects\DSP\ProjectBPAnalysis\data\ -p p000188 -i 1 -s abp -g
 """
 import os
 import argparse
