@@ -3,7 +3,7 @@ from scipy.signal import find_peaks
 
 def get_peaks(signal_data, fs=125):
     """
-    Finds the R-peaks in a physiological signal.
+    Finds peaks in the PPG signal.
     """
     # A normal resting heart rate is between 60-100 BPM.
     # That means peaks should be at least 0.6 seconds apart (100 BPM).
@@ -17,30 +17,62 @@ def get_peaks(signal_data, fs=125):
     return peaks
 
 
+def pan_tompkins_r_peaks(ecg_signal, fs=125):
+    """
+    Implements a simplified Pan-Tompkins algorithm to find ECG R-peaks.
+    """
+    # Differentiation (Find the steep slopes)
+    diff_ecg = np.diff(ecg_signal)
+    diff_ecg = np.append(diff_ecg, 0)  # Keep array length the same
+
+    #  Squaring (Exaggerate the steep slopes, suppress small waves)
+    squared_ecg = diff_ecg ** 2
+
+    # Moving Window Integration (Create a "lump" for each QRS complex)
+    # A standard window is roughly 150ms
+    window_width = int(0.15 * fs)
+    integrated_ecg = np.convolve(squared_ecg, np.ones(window_width) / window_width, mode='same')
+
+    # Find the "lumps" using the mean as an adaptive threshold
+    threshold = np.mean(integrated_ecg)
+    # Use find_peaks on the integrated signal (distance of 0.3s assumes max 200 BPM)
+    qrs_lumps, _ = find_peaks(integrated_ecg, height=threshold, distance=int(0.3 * fs))
+
+    # Map back to the original signal to find the exact R-peak
+    r_peaks = []
+    search_window = int(0.1 * fs)  # 100 ms search window around the lump
+
+    for lump in qrs_lumps:
+        start = max(0, lump - search_window)
+        end = min(len(ecg_signal), lump + search_window)
+        if start < end:
+            # The actual R-peak is the local maximum in the original signal
+            actual_r = start + np.argmax(ecg_signal[start:end])
+            r_peaks.append(actual_r)
+
+    # Return unique peaks in case windows slightly overlap
+    return np.unique(r_peaks)
+
+
 def get_p_peaks(ecg_signal, r_peaks, fs=125):
     """
-    Finds the P-wave by searching backward from each established R-peak.
+    Finds the P-wave using a stricter physiological window to avoid T-waves.
     """
     p_peaks = []
 
-    # The P-wave typically occurs roughly 120ms to 250ms before the R-peak.
-    # We define a search window looking backward from the R-peak.
-    search_window_start = int(0.25 * fs)  # 250 ms before
-    search_window_end = int(0.05 * fs)  # 50 ms before
+    # A normal PR interval is 120ms to 200ms.
+    # We restrict our search window to strictly 200ms to 40ms before the R-peak.
+    # This prevents the window from accidentally swallowing the previous T-wave.
+    search_start = int(0.20 * fs)  # 200ms before
+    search_end = int(0.04 * fs)  # 40ms before
 
     for r_peak in r_peaks:
-        # Ensure we don't look past the beginning of the array
-        start_idx = max(0, r_peak - search_window_start)
-        end_idx = max(0, r_peak - search_window_end)
+        start_idx = max(0, r_peak - search_start)
+        end_idx = max(0, r_peak - search_end)
 
         if start_idx < end_idx:
-            # Extract the window of data before the R-peak
             window_data = ecg_signal[start_idx:end_idx]
-
-            # The P-peak is the local maximum in this window
             p_peak_relative = np.argmax(window_data)
-
-            # Convert back to the absolute index in the main signal
             p_peak_absolute = start_idx + p_peak_relative
             p_peaks.append(p_peak_absolute)
 
@@ -68,9 +100,8 @@ def calculate_pat(ecg_peaks, ppg_peaks, fs=125):
             # Convert samples to milliseconds (or seconds)
             time_diff_ms = (sample_diff / fs) * 1000
 
-            # A valid PAT is usually between 150ms and 300ms.
             # We filter out wildly wrong values (like a missed peak)
-            if 100 < time_diff_ms < 400:
+            if 0 < time_diff_ms < 1000:
                 pat_values.append(time_diff_ms)
 
     # Return the average PAT for this 30-second segment
@@ -95,8 +126,7 @@ def calculate_ptt(p_peaks, ppg_peaks, fs=125):
             time_diff_ms = ((next_ppg_idx - p_idx) / fs) * 1000
 
             # PTT from the P-wave will be longer than PAT from the R-wave.
-            # We widen the valid range to 100ms - 500ms.
-            if 100 < time_diff_ms < 500:
+            if 0 < time_diff_ms < 1000:
                 ptt_values.append(time_diff_ms)
 
     if len(ptt_values) > 0:

@@ -1,5 +1,7 @@
 import numpy as np
+import matplotlib.pyplot as plt
 from scipy.signal import butter, filtfilt
+from scipy.signal import correlate, correlation_lags
 
 def apply_bandpass_filter(signal_data, lowcut, highcut, fs, order=4):
     """
@@ -57,3 +59,43 @@ def preprocess_segment(ecg_segment, ppg_segment, fs=125):
     clean_ppg = normalize_zscore(filtered_ppg)
 
     return clean_ecg, clean_ppg
+
+
+def plot_pre_post_processing(raw_signal, clean_signal, fs=125, signal_name="ECG", zoom_sec=5.0):
+    """
+    Plots the raw signal and the processed signal side-by-side (stacked)
+    for easy visual comparison.
+
+    zoom_sec: How many seconds of data to show. 5 seconds is usually best
+              to actually see the shape of the heartbeats.
+    """
+    # Create time axis in seconds
+    N = len(raw_signal)
+    t = np.arange(N) / fs
+
+    # Create a mask to only plot the first 'zoom_sec' seconds
+    # (Plotting all 30 seconds makes the waves too squished to see the noise reduction)
+    mask = t < zoom_sec
+
+    # Create a figure with 2 subplots (stacked vertically)
+    # sharex=True makes sure zooming/panning affects both graphs equally
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True, figsize=(10, 6))
+
+    # --- Top Graph: Raw Signal ---
+    ax1.plot(t[mask], raw_signal[mask], color='gray', label=f'Raw Noisy {signal_name}')
+    ax1.set_title(f'{signal_name} Preprocessing (First {zoom_sec}s)')
+    ax1.set_ylabel('Amplitude (Raw)')
+    ax1.legend(loc='upper right')
+    ax1.grid(True)
+
+    # --- Bottom Graph: Processed Signal ---
+    # We use a different color to easily distinguish them
+    color = 'blue' if signal_name.upper() == 'ECG' else 'green'
+    ax2.plot(t[mask], clean_signal[mask], color=color, label=f'Filtered & Normalized {signal_name}')
+    ax2.set_xlabel('Time (seconds)')
+    ax2.set_ylabel('Amplitude (Z-score)')
+    ax2.legend(loc='upper right')
+    ax2.grid(True)
+
+    plt.tight_layout()
+    plt.show()

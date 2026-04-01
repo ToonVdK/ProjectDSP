@@ -8,10 +8,10 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
+
 # Import functions from the other files
-from preprocess import preprocess_segment
-from extract_features import get_peaks, get_p_peaks, calculate_pat, calculate_ptt
-from extract_features import get_peaks, calculate_pat, get_p_peaks, calculate_ptt, calculate_heart_rate
+from preprocess import preprocess_segment, plot_pre_post_processing
+from extract_features import get_peaks, calculate_pat, get_p_peaks, calculate_ptt, calculate_heart_rate, pan_tompkins_r_peaks
 
 
 def load_signal(dbPath, patient, idx, signal_type):
@@ -31,7 +31,7 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
     clean_ecg, clean_ppg = preprocess_segment(raw_ecg, raw_ppg, fs=fs)
 
     # --- EXTRACT PEAKS ---
-    ecg_r_peaks = get_peaks(clean_ecg, fs=fs)
+    ecg_r_peaks = pan_tompkins_r_peaks(clean_ecg, fs=fs)
     ppg_peaks = get_peaks(clean_ppg, fs=fs)
     ecg_p_peaks = get_p_peaks(clean_ecg, ecg_r_peaks, fs=fs)
 
@@ -43,6 +43,9 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
 
     # Optional plotting for debugging single segments
     if plot:
+        plot_pre_post_processing(raw_ecg, clean_ecg, fs=fs, signal_name="ECG")
+        plot_pre_post_processing(raw_ppg, clean_ppg, fs=fs, signal_name="PPG")
+
         N = len(clean_ecg)
         t = np.arange(N) / fs
         mask = t < 5.0
@@ -100,11 +103,16 @@ def main():
         for i in range(30):
             try:
                 metrics = process_segment(args.dbPath, args.patient, i, fs=fs, plot=False)
-                # Only save results if the algorithm actually found valid PAT/PTT values (not NaN)
-                if not np.isnan(metrics['pat']) and not np.isnan(metrics['ptt']):
+
+                # Check if any of our crucial metrics returned NaN
+                if np.isnan(metrics['pat']) or np.isnan(metrics['ptt']) or np.isnan(metrics['ecg_hr']):
+                    print(f"[-] Skipped Segment {i:02d}: Rejected due to NaN (No valid biological peak pairs found).")
+                else:
+                    print(f"[+] Segment {i:02d} processed successfully.")
                     results.append(metrics)
+
             except Exception as e:
-                print(f"Skipping segment {i} due to error/bad data.")
+                print(f"[-] Skipped Segment {i:02d}: Code execution error -> {e}")
 
         # --- Calculate and Print Statistics ---
         if results:
