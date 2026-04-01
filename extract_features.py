@@ -103,3 +103,25 @@ def calculate_ptt(p_peaks, ppg_peaks, fs=125):
         return np.mean(ptt_values)
     else:
         return np.nan
+
+
+def calculate_heart_rate(peaks, fs=125):
+    """
+    Calculates the average heart rate (in BPM) from a list of peak indices.
+    """
+    # We need at least 2 peaks to calculate the time between them
+    if len(peaks) < 2:
+        return np.nan
+
+    # Calculate the distance between consecutive peaks in samples
+    # np.diff subtracts each element from the next one (e.g., peak2 - peak1)
+    intervals_samples = np.diff(peaks)
+
+    # Convert those sample intervals into seconds
+    intervals_seconds = intervals_samples / fs
+
+    # Convert seconds into Beats Per Minute (BPM)
+    instantaneous_bpm = 60.0 / intervals_seconds
+
+    # Return the average BPM for this entire 30-second segment
+    return np.mean(instantaneous_bpm)

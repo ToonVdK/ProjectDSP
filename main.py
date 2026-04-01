@@ -7,9 +7,10 @@ import argparse
 import numpy as np
 import matplotlib.pyplot as plt
 
-# Import the functions we built in the other files
+# Import functions from the other files
 from preprocess import preprocess_segment
 from extract_features import get_peaks, get_p_peaks, calculate_pat, calculate_ptt
+from extract_features import get_peaks, calculate_pat, get_p_peaks, calculate_ptt, calculate_heart_rate
 
 
 def load_signal(dbPath, patient, idx, signal_type):
@@ -28,30 +29,47 @@ def main():
 
     fs = 125  # Sampling frequency
 
-    # 1. Load Raw Data
+    # --- Load Raw Data ---
     print(f"Loading data for Patient {args.patient}, Segment {args.idx}...")
     raw_ecg = load_signal(args.dbPath, args.patient, args.idx, 'ecg')
     raw_ppg = load_signal(args.dbPath, args.patient, args.idx, 'ppg')
 
-    # 2. Preprocess (Bandpass + Z-score)
+    # --- Preprocess (Bandpass + Z-score) ---
     print("Preprocessing signals...")
     clean_ecg, clean_ppg = preprocess_segment(raw_ecg, raw_ppg, fs=fs)
 
-    # 3. Extract Fiducial Points
+    # --- Extract Fiducial Points ---
     print("Extracting peaks...")
     ecg_r_peaks = get_peaks(clean_ecg, fs=fs)
     ppg_peaks = get_peaks(clean_ppg, fs=fs)
     # Extract the P-waves using the R-peaks as anchors
     ecg_p_peaks = get_p_peaks(clean_ecg, ecg_r_peaks, fs=fs)
 
-    # 4. Calculate Delays
+    # --- Calculate Heart Rate ---
+    ecg_hr = calculate_heart_rate(ecg_r_peaks, fs=fs)
+    ppg_hr = calculate_heart_rate(ppg_peaks, fs=fs)
+    hr_difference = abs(ecg_hr - ppg_hr)
+
+    print("\n" + "=" * 40)
+    print("HEART RATE ANALYSIS")
+    print("=" * 40)
+    print(f"ECG Heart Rate:      {ecg_hr:.2f} BPM")
+    print(f"PPG Heart Rate:      {ppg_hr:.2f} BPM")
+    print(f"Absolute Difference: {hr_difference:.2f} BPM")
+    print("=" * 40 + "\n")
+
+    # --- Calculate Delays ---
     avg_pat = calculate_pat(ecg_r_peaks, ppg_peaks, fs=fs)
     avg_ptt = calculate_ptt(ecg_p_peaks, ppg_peaks, fs=fs)
-    print(f"\n---> Calculated Average PAT (R-peak to PPG): {avg_pat:.2f} ms")
-    print(f"---> Calculated Average PTT (P-peak to PPG): {avg_ptt:.2f} ms <---")
+    print("\n" + "=" * 40)
+    print("PAT & PTT ANALYSIS")
+    print("=" * 40)
+    print(f"Average PAT (R-peak to PPG): {avg_pat:.2f} ms")
+    print(f"Average PTT (P-peak to PPG): {avg_ptt:.2f} ms")
+    print("=" * 40 + "\n")
 
-    # 5. Visual Check
-    print("Generating visual check graph...")
+    # --- Visual Check ---
+    print("Generating graph...")
     N = len(clean_ecg)
     t = np.arange(N) / fs
     mask = t < 5.0
@@ -64,8 +82,8 @@ def main():
 
     # Plot ECG with R-peaks and P-peaks
     ax1.plot(t[mask], clean_ecg[mask], label='Filtered ECG', color='blue')
-    ax1.plot(t[ecg_r_plot], clean_ecg[ecg_r_plot], "ro", label='R-Peaks')
-    ax1.plot(t[ecg_p_plot], clean_ecg[ecg_p_plot], "yo", markersize=8, label='P-Peaks')  # Yellow dots for P-waves
+    ax1.plot(t[ecg_r_plot], clean_ecg[ecg_r_plot], "ro", label='R-Peaks', markersize=4)
+    ax1.plot(t[ecg_p_plot], clean_ecg[ecg_p_plot], "yo", label='P-Peaks',  markersize=4)  # Yellow dots for P-waves
     ax1.set_ylabel('Amplitude (Z-score)')
     ax1.set_title(f'Peak Detection - Patient {args.patient}, Seg {args.idx}')
     ax1.legend(loc='upper right')
@@ -73,7 +91,7 @@ def main():
 
     # Plot PPG
     ax2.plot(t[mask], clean_ppg[mask], label='Filtered PPG', color='green')
-    ax2.plot(t[ppg_plot], clean_ppg[ppg_plot], "ro", label='Systolic Peaks')
+    ax2.plot(t[ppg_plot], clean_ppg[ppg_plot], "ro", label='Systolic Peaks', markersize=4)
     ax2.set_xlabel('Time (seconds)')
     ax2.set_ylabel('Amplitude (Z-score)')
     ax2.legend(loc='upper right')
