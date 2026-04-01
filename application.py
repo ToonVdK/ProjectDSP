@@ -1,9 +1,14 @@
+import time
+
 import PyQt6 as qt
 import PyQt6.QtWidgets as widget
 import PyQt6.QtGui as gui
 import sys
 
+from PyQt6 import QtCore
 from PyQt6.QtWidgets import QFileDialog
+
+from window import Ui_MainWindow
 
 """
 Required functionality
@@ -56,7 +61,8 @@ class MainWindow(widget.QMainWindow):
         pat_value = widget.QLabel("PAT value: ")
         ptt_value = widget.QLabel("PTT value: ")
         bp_value = widget.QLabel("BP value: ")
-        processing_img = widget.QLabel(self)
+        prefilter_img = widget.QLabel(self)
+        postfilter_img = widget.QLabel(self)
 
         # Button function assignment
         load_data.clicked.connect(self.loadData)
@@ -66,9 +72,24 @@ class MainWindow(widget.QMainWindow):
         derive_BP.clicked.connect(self.deriveBP)
         export_data.clicked.connect(self.exportData)
 
+        # Button Size
+        load_data.setMaximumWidth(load_data.fontMetrics().boundingRect("Load data").width() + 20)
+        load_data.setMinimumWidth(load_data.fontMetrics().boundingRect("Load data").width() + 20)
+        preprocess_data.setMaximumWidth(preprocess_state.fontMetrics().boundingRect("Preprocess Data").width() + 20)
+        preprocess_data.setMinimumWidth(preprocess_state.fontMetrics().boundingRect("Preprocess Data").width() + 20)
+        calculate_pat.setMaximumWidth(calculate_pat.fontMetrics().boundingRect("Calculate PAT").width() + 20)
+        calculate_pat.setMinimumWidth(calculate_pat.fontMetrics().boundingRect("Calculate PAT").width() + 20)
+        calculate_ptt.setMaximumWidth(calculate_ptt.fontMetrics().boundingRect("Calculate PTT").width() + 20)
+        calculate_ptt.setMinimumWidth(calculate_ptt.fontMetrics().boundingRect("Calculate PTT").width() + 20)
+        derive_BP.setMaximumWidth(derive_BP.fontMetrics().boundingRect("Derive BP").width() + 20)
+        derive_BP.setMinimumWidth(derive_BP.fontMetrics().boundingRect("Derive BP").width() + 20)
+        export_data.setMaximumWidth(export_data.fontMetrics().boundingRect("Export Data").width() + 20)
+        export_data.setMinimumWidth(export_data.fontMetrics().boundingRect("Export Data").width() + 20)
+
+
         # Object place in layout
         outer_vbox1.addStretch()
-        outer_vbox1.addWidget(processing_img)
+        outer_vbox1.addWidget(prefilter_img)
         outer_vbox1.addWidget(load_data)
         outer_vbox1.addStretch()
         outer_vbox2.addWidget(preprocess_data)
@@ -111,8 +132,25 @@ app.setApplicationName("HeartBP")
 app.setApplicationVersion("1.0")
 app.setWindowIcon(gui.QIcon("img/icon.png"))
 
+splash_pix = gui.QPixmap("img/heartBP.png").scaled(800, 800)
+splash = widget.QSplashScreen(splash_pix, QtCore.Qt.WindowType.WindowStaysOnTopHint)
+# add fade to splashscreen
+opaqueness = 0.0
+step = 0.02
+splash.setWindowOpacity(opaqueness)
+splash.show()
+while opaqueness < 1:
+    splash.setWindowOpacity(opaqueness)
+    time.sleep(step) # Gradually appears
+    opaqueness+=step
+time.sleep(1) # hold image on screen for a while
+splash.close() # close the splash screen
+
 # Create a Qt widget, which will be our window.
-window = MainWindow()
+window = widget.QMainWindow()
+mainWindow = Ui_MainWindow()
+mainWindow.setupUi(window)
+mainWindow.retranslateUi(window)
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
