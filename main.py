@@ -10,7 +10,7 @@ import matplotlib.pyplot as plt
 
 
 # Import functions from the other files
-from preprocess import preprocess_segment, plot_pre_post_processing
+from preprocess import plot_pre_post_processing
 from extract_features import *
 
 
@@ -27,15 +27,9 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
     raw_ecg = load_signal(dbPath, patient, idx, 'ecg')
     raw_ppg = load_signal(dbPath, patient, idx, 'ppg')
 
-    # --- PREPROCESS ---
-    clean_ecg, clean_ppg = preprocess_segment(raw_ecg, raw_ppg, fs=fs)
+    # --- RUN MASTER PIPELINE ---
+    metrics, clean_ecg, clean_ppg, ecg_r_peaks, ppg_peaks = get_all_features(raw_ecg, raw_ppg, fs=fs)
 
-    # --- EXTRACT PEAKS ---
-    ecg_r_peaks = pan_tompkins_r_peaks(clean_ecg, fs=fs)
-    ppg_peaks = get_peaks(clean_ppg, fs=fs)
-
-    # --- CALCULATE METRICS ---
-    metrics = get_all_features(clean_ecg, clean_ppg, ecg_r_peaks, ppg_peaks, fs=fs)
     metrics['segment'] = idx
 
     # Optional plotting for debugging single segments
