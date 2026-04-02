@@ -1,5 +1,6 @@
 import numpy as np
 from scipy.signal import find_peaks
+from preprocess import preprocess_segment
 
 def get_peaks(signal_data, fs=125):
     """
@@ -229,10 +230,17 @@ def calculate_hrv(peaks, fs=125):
 
     return sdnn, rmssd
 
-def get_all_features(clean_ecg, clean_ppg, ecg_peaks, ppg_peaks, fs=125):
+def get_all_features(raw_ecg, raw_ppg, fs=125):
     """
-    Wrapper function that calculates and returns all HR, SQI, and HRV metrics in a single call.
+    Master pipeline wrapper: Preprocesses, extracts peaks, and calculates all metrics.
     """
+    # Preprocess the raw signals
+    clean_ecg, clean_ppg = preprocess_segment(raw_ecg, raw_ppg, fs=fs)
+
+    # Extract Peaks
+    ecg_peaks = pan_tompkins_r_peaks(clean_ecg, fs=fs)
+    ppg_peaks = get_peaks(clean_ppg, fs=fs)
+
     # Calculate Base Heart Rates
     ecg_hr = calculate_heart_rate(ecg_peaks, fs=fs)
     ppg_hr = calculate_heart_rate(ppg_peaks, fs=fs)
@@ -252,8 +260,8 @@ def get_all_features(clean_ecg, clean_ppg, ecg_peaks, ppg_peaks, fs=125):
     fused_sdnn = (w_ecg * ecg_sdnn) + (w_ppg * ppg_sdnn)
     fused_rmssd = (w_ecg * ecg_rmssd) + (w_ppg * ppg_rmssd)
 
-    # Return everything as a structured dictionary
-    return {
+    # Package the metrics into a dictionary
+    metrics = {
         'ecg_hr': ecg_hr,
         'ecg_sqi': ecg_sqi,
         'ecg_weight': w_ecg,
@@ -264,3 +272,6 @@ def get_all_features(clean_ecg, clean_ppg, ecg_peaks, ppg_peaks, fs=125):
         'fused_sdnn': fused_sdnn,
         'fused_rmssd': fused_rmssd
     }
+
+    # Return the metrics AND the arrays needed for plotting
+    return metrics, clean_ecg, clean_ppg, ecg_peaks, ppg_peaks
