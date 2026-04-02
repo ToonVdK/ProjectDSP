@@ -7,7 +7,7 @@
 import numpy as np
 from PyQt6 import QtCore, QtGui, QtWidgets
 
-from main import load_signal, process_segment
+from main import process_segment
 
 
 class Ui_MainWindow(object):
@@ -107,7 +107,7 @@ class Ui_MainWindow(object):
         self.vertical_metric_2.setFrameShadow(QtWidgets.QFrame.Shadow.Sunken)
         self.vertical_metric_2.setObjectName("vertical_metric_2")
         self.ecg_heartrate_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ecg_heartrate_value.setGeometry(QtCore.QRect(260, 111, 38, 43))
+        self.ecg_heartrate_value.setGeometry(QtCore.QRect(260, 111, 361, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.ecg_heartrate_value.setFont(font)
@@ -129,7 +129,7 @@ class Ui_MainWindow(object):
         self.ecg_heartrate_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.ecg_heartrate_title.setObjectName("ecg_heartrate_title")
         self.ecg_weight_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ecg_weight_value.setGeometry(QtCore.QRect(230, 250, 38, 43))
+        self.ecg_weight_value.setGeometry(QtCore.QRect(230, 250, 391, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.ecg_weight_value.setFont(font)
@@ -137,7 +137,7 @@ class Ui_MainWindow(object):
         self.ecg_weight_value.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.ecg_weight_value.setObjectName("ecg_weight_value")
         self.ecg_sqi_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ecg_sqi_value.setGeometry(QtCore.QRect(180, 180, 38, 43))
+        self.ecg_sqi_value.setGeometry(QtCore.QRect(180, 180, 441, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.ecg_sqi_value.setFont(font)
@@ -159,7 +159,7 @@ class Ui_MainWindow(object):
         self.ppg_sqi_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.ppg_sqi_title.setObjectName("ppg_sqi_title")
         self.ppg_sqi_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ppg_sqi_value.setGeometry(QtCore.QRect(180, 410, 38, 43))
+        self.ppg_sqi_value.setGeometry(QtCore.QRect(180, 410, 441, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.ppg_sqi_value.setFont(font)
@@ -181,7 +181,7 @@ class Ui_MainWindow(object):
         self.ppg_heartrate_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.ppg_heartrate_title.setObjectName("ppg_heartrate_title")
         self.ppg_heartrate_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ppg_heartrate_value.setGeometry(QtCore.QRect(260, 341, 38, 43))
+        self.ppg_heartrate_value.setGeometry(QtCore.QRect(260, 341, 361, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.ppg_heartrate_value.setFont(font)
@@ -189,7 +189,7 @@ class Ui_MainWindow(object):
         self.ppg_heartrate_value.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.ppg_heartrate_value.setObjectName("ppg_heartrate_value")
         self.ppg_weight_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.ppg_weight_value.setGeometry(QtCore.QRect(230, 480, 38, 43))
+        self.ppg_weight_value.setGeometry(QtCore.QRect(230, 480, 391, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.ppg_weight_value.setFont(font)
@@ -197,7 +197,7 @@ class Ui_MainWindow(object):
         self.ppg_weight_value.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.ppg_weight_value.setObjectName("ppg_weight_value")
         self.fhr_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.fhr_value.setGeometry(QtCore.QRect(270, 560, 38, 43))
+        self.fhr_value.setGeometry(QtCore.QRect(270, 560, 351, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.fhr_value.setFont(font)
@@ -212,7 +212,7 @@ class Ui_MainWindow(object):
         self.fhr_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.fhr_title.setObjectName("fhr_title")
         self.fhrvsdnn_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.fhrvsdnn_value.setGeometry(QtCore.QRect(220, 610, 38, 43))
+        self.fhrvsdnn_value.setGeometry(QtCore.QRect(220, 610, 401, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.fhrvsdnn_value.setFont(font)
@@ -235,7 +235,7 @@ class Ui_MainWindow(object):
         self.fhrvrmssd_title.setAlignment(QtCore.Qt.AlignmentFlag.AlignLeading|QtCore.Qt.AlignmentFlag.AlignLeft|QtCore.Qt.AlignmentFlag.AlignVCenter)
         self.fhrvrmssd_title.setObjectName("fhrvrmssd_title")
         self.fhrvrmssd_value = QtWidgets.QLabel(parent=self.centralwidget)
-        self.fhrvrmssd_value.setGeometry(QtCore.QRect(240, 660, 38, 43))
+        self.fhrvrmssd_value.setGeometry(QtCore.QRect(240, 660, 381, 43))
         font = QtGui.QFont()
         font.setPointSize(24)
         self.fhrvrmssd_value.setFont(font)
@@ -273,6 +273,7 @@ class Ui_MainWindow(object):
         self.fhrvsdnn_title.setText(_translate("MainWindow", "FHRV SDNN:"))
         self.fhrvrmssd_title.setText(_translate("MainWindow", "FHRV RMSSD:"))
         self.fhrvrmssd_value.setText(_translate("MainWindow", "XX"))
+
 
     def bindButtons(self):
         self.load_data.clicked.connect(self.loadData)
