@@ -155,3 +155,76 @@ def calculate_heart_rate(peaks, fs=125):
 
     # Return the average BPM for this entire 30-second segment
     return np.mean(instantaneous_bpm)
+
+
+def calculate_sqi(signal, peaks, fs=125):
+    """
+    Calculates a Signal Quality Index (SQI) between 0.0 (garbage) and 1.0 (perfect)
+    based on Peak Regularity and Amplitude Stability.
+    """
+    if len(peaks) < 3:
+        return 0.0  # Not enough peaks to evaluate
+
+    # --- PEAK REGULARITY (Consistency of the intervals between beats) ---
+    intervals = np.diff(peaks) / fs
+    mean_interval = np.mean(intervals)
+    std_interval = np.std(intervals)
+
+    # Coefficient of Variation for intervals (CV = std / mean)
+    cv_intervals = std_interval / mean_interval if mean_interval > 0 else 1.0
+
+    # Map to a 0-1 score. A CV > 0.3 means massive arrhythmia or noise.
+    regularity_score = max(0.0, 1.0 - (cv_intervals / 0.3))
+
+    # --- AMPLITUDE STABILITY (Consistency of the peak heights) ---
+    peak_amps = signal[peaks]
+    mean_amp = np.mean(peak_amps)
+    std_amp = np.std(peak_amps)
+
+    # Coefficient of Variation for amplitudes
+    cv_amps = std_amp / mean_amp if mean_amp > 0 else 1.0
+
+    # Map to a 0-1 score. A CV > 0.5 means baseline wander is ruining the peaks.
+    amplitude_score = max(0.0, 1.0 - (cv_amps / 0.5))
+
+    # The final SQI is the average of both stability metrics
+    return (regularity_score + amplitude_score) / 2.0
+
+
+def fuse_heart_rates(ecg_hr, ppg_hr, ecg_sqi, ppg_sqi):
+    """
+    Calculates the weights and the fused Heart Rate based on the SQI scores.
+    """
+    # Prevent division by zero if both signals are completely corrupted
+    total_sqi = ecg_sqi + ppg_sqi
+    if total_sqi == 0:
+        return np.nan, 0.0, 0.0
+
+    # Calculate Weight Ratios
+    w_ecg = ecg_sqi / total_sqi
+    w_ppg = ppg_sqi / total_sqi
+
+    # Fused HR Calculation
+    hr_fused = (w_ecg * ecg_hr) + (w_ppg * ppg_hr)
+
+    return hr_fused, w_ecg, w_ppg
+
+def calculate_hrv(peaks, fs=125):
+    """
+    Calculates time-domain Heart Rate Variability (HRV) metrics: SDNN and RMSSD.
+    Returns values in milliseconds.
+    """
+    if len(peaks) < 3:
+        return np.nan, np.nan  # Need at least 3 peaks for successive differences
+
+    # Calculate the time between peaks (RR intervals) in milliseconds
+    rr_intervals_ms = np.diff(peaks) / fs * 1000.0
+
+    # SDNN: Standard deviation of all RR intervals
+    sdnn = np.std(rr_intervals_ms)
+
+    # RMSSD: Root mean square of successive differences
+    successive_diffs = np.diff(rr_intervals_ms)
+    rmssd = np.sqrt(np.mean(successive_diffs**2))
+
+    return sdnn, rmssd

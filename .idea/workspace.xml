@@ -5,10 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2761cb92-69f9-41d9-be83-ad1ee71f7df0" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/ProjectBPAnalysis.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/ProjectBPAnalysis.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_03_2026_15_46_[Changes]/shelved.patch" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Update_at_18_03_2026_15_46__Changes_.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/clean_dataset.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/extract_features.py" beforeDir="false" afterPath="$PROJECT_DIR$/extract_features.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main.py" beforeDir="false" afterPath="$PROJECT_DIR$/main.py" afterDir="false" />
@@ -52,9 +49,13 @@
   "keyToString": {
     "ModuleVcsDetector.initialDetectionPerformed": "true",
     "Python.application.executor": "Run",
+    "Python.clean_dataset.executor": "Run",
+    "Python.cleanup.executor": "Run",
     "Python.main.executor": "Run",
     "Python.preprocess.executor": "Run",
     "Python.read_data.executor": "Run",
+    "Python.restore_data.executor": "Run",
+    "Python.visualize.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
