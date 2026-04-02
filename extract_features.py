@@ -228,3 +228,39 @@ def calculate_hrv(peaks, fs=125):
     rmssd = np.sqrt(np.mean(successive_diffs**2))
 
     return sdnn, rmssd
+
+def get_all_features(clean_ecg, clean_ppg, ecg_peaks, ppg_peaks, fs=125):
+    """
+    Wrapper function that calculates and returns all HR, SQI, and HRV metrics in a single call.
+    """
+    # Calculate Base Heart Rates
+    ecg_hr = calculate_heart_rate(ecg_peaks, fs=fs)
+    ppg_hr = calculate_heart_rate(ppg_peaks, fs=fs)
+
+    # Calculate Signal Quality Indices (SQI)
+    ecg_sqi = calculate_sqi(clean_ecg, ecg_peaks, fs=fs)
+    ppg_sqi = calculate_sqi(clean_ppg, ppg_peaks, fs=fs)
+
+    # Calculate Weights and Fused Heart Rate
+    fused_hr, w_ecg, w_ppg = fuse_heart_rates(ecg_hr, ppg_hr, ecg_sqi, ppg_sqi)
+
+    # Calculate Base HRV Metrics (SDNN & RMSSD)
+    ecg_sdnn, ecg_rmssd = calculate_hrv(ecg_peaks, fs=fs)
+    ppg_sdnn, ppg_rmssd = calculate_hrv(ppg_peaks, fs=fs)
+
+    # Calculate Fused HRV Metrics
+    fused_sdnn = (w_ecg * ecg_sdnn) + (w_ppg * ppg_sdnn)
+    fused_rmssd = (w_ecg * ecg_rmssd) + (w_ppg * ppg_rmssd)
+
+    # Return everything as a structured dictionary
+    return {
+        'ecg_hr': ecg_hr,
+        'ecg_sqi': ecg_sqi,
+        'ecg_weight': w_ecg,
+        'ppg_hr': ppg_hr,
+        'ppg_sqi': ppg_sqi,
+        'ppg_weight': w_ppg,
+        'fused_hr': fused_hr,
+        'fused_sdnn': fused_sdnn,
+        'fused_rmssd': fused_rmssd
+    }
