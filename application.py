@@ -1,23 +1,10 @@
 import time
-
 import PyQt6 as qt
 import PyQt6.QtWidgets as widget
 import PyQt6.QtGui as gui
-import sys
-
 from PyQt6 import QtCore
-from PyQt6.QtWidgets import QFileDialog
-
+import sys
 from window import Ui_MainWindow
-
-"""
-Required functionality
-- Load data (button, upload file)
-- Preprocess data (button, process)
-- Calculate PAT and PTT (2 buttons, both have an output field)
-- Derive BP (button, derive bp)
-- Export processed data and analysis summary (button, export file)
-"""
 
 # You need one (and only one) QApplication instance per application.
 # Pass in sys.argv to allow command line arguments for your app.
@@ -110,7 +97,7 @@ class MainWindow(widget.QMainWindow):
         self.setCentralWidget(central_widget)
 
     def loadData(self):
-        filepath, _ = widget.QFileDialog.getOpenFileName(self,"Select .npy file","","NumPy files (*.npy)")
+        filepath, _ = widget.QFileDialog.getOpenFileName(self,"Select .npy data file","","NumPy files (*.npy)")
 
     def preprocessData(self):
         print("Preprocessing Data...")
@@ -151,6 +138,7 @@ window = widget.QMainWindow()
 mainWindow = Ui_MainWindow()
 mainWindow.setupUi(window)
 mainWindow.retranslateUi(window)
+window.setFixedSize(window.size())
 window.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
