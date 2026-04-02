@@ -35,18 +35,8 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
     ppg_peaks = get_peaks(clean_ppg, fs=fs)
 
     # --- CALCULATE METRICS ---
-    ecg_hr = calculate_heart_rate(ecg_r_peaks, fs=fs)
-    ppg_hr = calculate_heart_rate(ppg_peaks, fs=fs)
-    ecg_sdnn, ecg_rmssd = calculate_hrv(ecg_r_peaks, fs=fs)
-    ppg_sdnn, ppg_rmssd = calculate_hrv(ppg_peaks, fs=fs)
-
-    # --- SIGNAL QUALITY & FUSION
-    ecg_sqi = calculate_sqi(clean_ecg, ecg_r_peaks, fs=fs)
-    ppg_sqi = calculate_sqi(clean_ppg, ppg_peaks, fs=fs)
-    fused_hr, w_ecg, w_ppg = fuse_heart_rates(ecg_hr, ppg_hr, ecg_sqi, ppg_sqi)
-
-    fused_sdnn = (w_ecg * ecg_sdnn) + (w_ppg * ppg_sdnn)
-    fused_rmssd = (w_ecg * ecg_rmssd) + (w_ppg * ppg_rmssd)
+    metrics = get_all_features(clean_ecg, clean_ppg, ecg_r_peaks, ppg_peaks, fs=fs)
+    metrics['segment'] = idx
 
     # Optional plotting for debugging single segments
     if plot:
@@ -81,13 +71,7 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
         plt.tight_layout()
         plt.show()
 
-    return {
-        'segment': idx,
-        'ecg_hr': ecg_hr, 'ppg_hr': ppg_hr, 'fused_hr': fused_hr,
-        'ecg_sqi': ecg_sqi, 'ppg_sqi': ppg_sqi, 'w_ecg': w_ecg, 'w_ppg': w_ppg,
-        'ecg_sdnn': ecg_sdnn, 'ppg_sdnn': ppg_sdnn, 'fused_sdnn': fused_sdnn,
-        'ecg_rmssd': ecg_rmssd, 'ppg_rmssd': ppg_rmssd, 'fused_rmssd': fused_rmssd
-    }
+    return metrics
 
 
 def main():
@@ -126,8 +110,8 @@ def main():
             mean_ppg_hr = np.mean([res['ppg_hr'] for res in results])
             mean_ecg_sqi = np.mean([res['ecg_sqi'] for res in results])
             mean_ppg_sqi = np.mean([res['ppg_sqi'] for res in results])
-            mean_w_ecg = np.mean([res['w_ecg'] for res in results])
-            mean_w_ppg = np.mean([res['w_ppg'] for res in results])
+            mean_w_ecg = np.mean([res['ecg_weight'] for res in results])
+            mean_w_ppg = np.mean([res['ppg_weight'] for res in results])
 
             mean_fused_hr = np.mean([res['fused_hr'] for res in results])
 
