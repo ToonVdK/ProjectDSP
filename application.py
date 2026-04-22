@@ -28,7 +28,6 @@ splash.close() # close the splash screen
 dispWindow = widget.QMainWindow()
 mainWindow = Ui_MainWindow()
 mainWindow.setupUi(dispWindow)
-dispWindow.setFixedSize(dispWindow.size())
 dispWindow.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
