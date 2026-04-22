@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
 from scipy.signal import butter, filtfilt
 from scipy.signal import correlate, correlation_lags
 
@@ -99,3 +100,15 @@ def plot_pre_post_processing(raw_signal, clean_signal, fs=125, signal_name="ECG"
 
     plt.tight_layout()
     plt.show()
+
+def return_pre_post_processing(raw_signal, clean_signal, fs=125, signal_name="ECG", zoom_sec=5.0):
+    N = len(raw_signal)
+    t = np.arange(N) / fs
+    mask = t < zoom_sec
+
+    return {
+        "t": t[mask],
+        "raw": raw_signal[mask],
+        "clean": clean_signal[mask],
+        "name": signal_name
+    }

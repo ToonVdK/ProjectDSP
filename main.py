@@ -7,10 +7,10 @@ import os
 import argparse
 import numpy as np
 import matplotlib.pyplot as plt
-
+from matplotlib.figure import Figure
 
 # Import functions from the other files
-from preprocess import plot_pre_post_processing
+from preprocess import plot_pre_post_processing, return_pre_post_processing
 from extract_features import *
 
 
@@ -66,6 +66,65 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
         plt.show()
 
     return metrics
+
+def process_segment_with_figure(dbPath, patient, idx, fs=125):
+    raw_ecg = load_signal(dbPath, patient, idx, 'ecg')
+    raw_ppg = load_signal(dbPath, patient, idx, 'ppg')
+
+    metrics, clean_ecg, clean_ppg, ecg_r_peaks, ppg_peaks = get_all_features(
+        raw_ecg, raw_ppg, fs=fs
+    )
+
+    metrics['segment'] = idx
+
+    N = len(clean_ecg)
+    t = np.arange(N) / fs
+    mask = t < 5.0
+
+    ecg_r_plot = ecg_r_peaks[ecg_r_peaks < (5.0 * fs)]
+    ppg_plot = ppg_peaks[ppg_peaks < (5.0 * fs)]
+
+    fig = Figure()
+    ax1 = fig.add_subplot(2, 1, 1)
+    ax2 = fig.add_subplot(2, 1, 2)
+
+    ax1.plot(t[mask], clean_ecg[mask], label='Filtered ECG', color='blue')
+    ax1.plot(t[ecg_r_plot], clean_ecg[ecg_r_plot], "ro", markersize=4)
+    ax1.set_title(f'Peak Detection - Patient {patient}, Seg {idx}')
+    ax1.legend()
+    ax1.grid(True)
+
+    ax2.plot(t[mask], clean_ppg[mask], label='Filtered PPG', color='green')
+    ax2.plot(t[ppg_plot], clean_ppg[ppg_plot], "ro", markersize=4)
+    ax2.legend()
+    ax2.grid(True)
+
+    fig.tight_layout()
+
+    ecg = return_pre_post_processing(raw_ecg, clean_ecg, fs, "ECG")
+    ppg = return_pre_post_processing(raw_ppg, clean_ppg, fs, "PPG")
+
+    fig2 = Figure()  # TODO: FIXED ISSUE HERE
+    ax3 = fig2.add_subplot(2, 1, 1)  # ECG
+    ax4 = fig2.add_subplot(2, 1, 2)  # PPG
+
+    # ECG plot
+    ax3.plot(ecg["t"], ecg["raw"], color='gray', label='Raw ECG')
+    ax3.plot(ecg["t"], ecg["clean"], color='blue', label='Filtered ECG')
+    ax3.set_title("ECG Pre/Post Processing")
+    ax3.legend()
+    ax3.grid(True)
+
+    # PPG plot
+    ax4.plot(ppg["t"], ppg["raw"], color='gray', label='Raw PPG')
+    ax4.plot(ppg["t"], ppg["clean"], color='green', label='Filtered PPG')
+    ax4.set_title("PPG Pre/Post Processing")
+    ax4.legend()
+    ax4.grid(True)
+
+    fig2.tight_layout()
+
+    return metrics, fig, fig2
 
 
 def main():
