@@ -1,10 +1,9 @@
 import time
-import PyQt6 as qt
 import PyQt6.QtWidgets as widget
 import PyQt6.QtGui as gui
 from PyQt6 import QtCore
 import sys
-from window import Ui_MainWindow
+from appWindow import Ui_MainWindow
 
 app = widget.QApplication(sys.argv)
 app.setApplicationName("HeartBP")
@@ -26,11 +25,11 @@ time.sleep(1) # hold image on screen for a while
 splash.close() # close the splash screen
 
 # Create a Qt widget, which will be our window.
-window = widget.QMainWindow()
+dispWindow = widget.QMainWindow()
 mainWindow = Ui_MainWindow()
-mainWindow.setupUi(window)
-window.setFixedSize(window.size())
-window.show()  # IMPORTANT!!!!! Windows are hidden by default.
+mainWindow.setupUi(dispWindow)
+dispWindow.setFixedSize(dispWindow.size())
+dispWindow.show()  # IMPORTANT!!!!! Windows are hidden by default.
 
 # Start the event loop.
 app.exec()
