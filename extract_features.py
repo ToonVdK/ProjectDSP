@@ -35,7 +35,7 @@ def pan_tompkins_r_peaks(ecg_signal, fs=125):
     integrated_ecg = np.convolve(squared_ecg, np.ones(window_width) / window_width, mode='same')
 
     # Find the "lumps" using the mean as an adaptive threshold
-    threshold = np.mean(integrated_ecg)
+    threshold = 2.5 * np.mean(integrated_ecg)
     # Use find_peaks on the integrated signal (distance of 0.3s assumes max 200 BPM)
     qrs_lumps, _ = find_peaks(integrated_ecg, height=threshold, distance=int(0.3 * fs))
 

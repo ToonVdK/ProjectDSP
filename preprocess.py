@@ -50,7 +50,7 @@ def preprocess_segment(ecg_segment, ppg_segment, fs=125):
     """
     # ----- Bandpass Filtering -----
     # ECG: typically 0.5 Hz to 40 Hz to remove baseline wander and high-freq noise
-    filtered_ecg = apply_bandpass_filter(ecg_segment, lowcut=0.5, highcut=40.0, fs=fs)
+    filtered_ecg = apply_bandpass_filter(ecg_segment, lowcut=0.5, highcut=15.0, fs=fs)
 
     # PPG: typically 0.5 Hz to 8 Hz (the pulse wave is a much lower frequency signal)
     filtered_ppg = apply_bandpass_filter(ppg_segment, lowcut=0.5, highcut=8.0, fs=fs)
