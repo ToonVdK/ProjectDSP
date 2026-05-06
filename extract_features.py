@@ -7,7 +7,7 @@ def get_peaks(signal_data, fs=125):
     Finds peaks in the PPG signal.
     """
     # A normal resting heart rate is between 60-100 BPM.
-    # That means peaks should be at least 0.6 seconds apart (100 BPM).
+    # That means peaks should be at least 0.3 seconds apart (200 BPM).
     # We set a minimum distance between peaks to avoid double-counting noise.
     min_distance_samples = int(0.3 * fs)
 
@@ -26,7 +26,7 @@ def pan_tompkins_r_peaks(ecg_signal, fs=125):
     diff_ecg = np.diff(ecg_signal)
     diff_ecg = np.append(diff_ecg, 0)  # Keep array length the same
 
-    #  Squaring (Exaggerate the steep slopes, suppress small waves)
+    # Squaring (Exaggerate the steep slopes, suppress small waves)
     squared_ecg = diff_ecg ** 2
 
     # Moving Window Integration (Create a "lump" for each QRS complex)
@@ -53,87 +53,6 @@ def pan_tompkins_r_peaks(ecg_signal, fs=125):
 
     # Return unique peaks in case windows slightly overlap
     return np.unique(r_peaks)
-
-
-def get_p_peaks(ecg_signal, r_peaks, fs=125):
-    """
-    Finds the P-wave using a stricter physiological window to avoid T-waves.
-    """
-    p_peaks = []
-
-    # A normal PR interval is 120ms to 200ms.
-    # We restrict our search window to strictly 200ms to 40ms before the R-peak.
-    # This prevents the window from accidentally swallowing the previous T-wave.
-    search_start = int(0.20 * fs)  # 200ms before
-    search_end = int(0.04 * fs)  # 40ms before
-
-    for r_peak in r_peaks:
-        start_idx = max(0, r_peak - search_start)
-        end_idx = max(0, r_peak - search_end)
-
-        if start_idx < end_idx:
-            window_data = ecg_signal[start_idx:end_idx]
-            p_peak_relative = np.argmax(window_data)
-            p_peak_absolute = start_idx + p_peak_relative
-            p_peaks.append(p_peak_absolute)
-
-    return np.array(p_peaks)
-
-def calculate_pat(ecg_peaks, ppg_peaks, fs=125):
-    """
-    Calculates the Pulse Arrival Time (PAT) for a segment.
-    PAT is the time difference between an ECG R-peak and the *next* PPG peak.
-    """
-    pat_values = []
-
-    # Go through each ECG peak
-    for ecg_idx in ecg_peaks:
-        # Find all PPG peaks that occur AFTER this ECG peak
-        valid_ppg_peaks = ppg_peaks[ppg_peaks > ecg_idx]
-
-        # If there is a subsequent PPG peak, calculate the time difference
-        if len(valid_ppg_peaks) > 0:
-            next_ppg_idx = valid_ppg_peaks[0]  # The very first one after the ECG peak
-
-            # Difference in samples
-            sample_diff = next_ppg_idx - ecg_idx
-
-            # Convert samples to milliseconds (or seconds)
-            time_diff_ms = (sample_diff / fs) * 1000
-
-            # We filter out wildly wrong values (like a missed peak)
-            if 0 < time_diff_ms < 1000:
-                pat_values.append(time_diff_ms)
-
-    # Return the average PAT for this 30-second segment
-    if len(pat_values) > 0:
-        return np.mean(pat_values)
-    else:
-        return np.nan  # Return Not-a-Number if no valid PATs were found
-
-
-def calculate_ptt(p_peaks, ppg_peaks, fs=125):
-    """
-    Calculates PTT based on the time difference between the ECG P-peak and the next PPG peak.
-    """
-    ptt_values = []
-
-    for p_idx in p_peaks:
-        valid_ppg_peaks = ppg_peaks[ppg_peaks > p_idx]
-
-        if len(valid_ppg_peaks) > 0:
-            next_ppg_idx = valid_ppg_peaks[0]
-
-            time_diff_ms = ((next_ppg_idx - p_idx) / fs) * 1000
-
-            # PTT from the P-wave will be longer than PAT from the R-wave.
-            if 0 < time_diff_ms < 1000:
-                ptt_values.append(time_diff_ms)
-
-    if len(ptt_values) > 0:
-        return np.mean(ptt_values)
-    else:
-        return np.nan
 
 
 def calculate_heart_rate(peaks, fs=125):
@@ -167,7 +86,7 @@ def calculate_sqi(signal, peaks, fs=125):
         return 0.0  # Not enough peaks to evaluate
 
     # --- PEAK REGULARITY (Consistency of the intervals between beats) ---
-    intervals = np.diff(peaks) / fs
+    intervals = np.diff(peaks) / fs  # Calculates time between RR peaks in seconds
     mean_interval = np.mean(intervals)
     std_interval = np.std(intervals)
 
