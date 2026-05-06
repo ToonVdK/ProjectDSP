@@ -296,10 +296,39 @@ class Ui_MainWindow(object):
         )
         self.export_data.setObjectName("export_data")
 
-        self.right_layout.addWidget(self.canvas1, 1)
-        self.right_layout.addWidget(self.load_data, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
-        self.right_layout.addWidget(self.canvas2, 1)
-        self.right_layout.addWidget(self.export_data, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+        # Create vertical splitter for plots
+        self.plot_splitter = QtWidgets.QSplitter(QtCore.Qt.Orientation.Vertical)
+        self.plot_splitter.setChildrenCollapsible(False)
+        self.plot_splitter.setHandleWidth(6)
+
+        # --- Top block (Plot 1 + Load button) ---
+        self.top_block = QtWidgets.QWidget()
+        top_layout = QtWidgets.QVBoxLayout(self.top_block)
+        top_layout.setContentsMargins(0, 0, 0, 0)
+        top_layout.setSpacing(6)
+
+        top_layout.addWidget(self.canvas1, 1)
+        top_layout.addWidget(self.load_data, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+        # --- Bottom block (Plot 2 + Export button) ---
+        self.bottom_block = QtWidgets.QWidget()
+        bottom_layout = QtWidgets.QVBoxLayout(self.bottom_block)
+        bottom_layout.setContentsMargins(0, 0, 0, 0)
+        bottom_layout.setSpacing(6)
+
+        bottom_layout.addWidget(self.canvas2, 1)
+        bottom_layout.addWidget(self.export_data, 0, QtCore.Qt.AlignmentFlag.AlignHCenter)
+
+        # Add blocks to splitter
+        self.plot_splitter.addWidget(self.top_block)
+        self.plot_splitter.addWidget(self.bottom_block)
+
+        # Equal sizing
+        self.plot_splitter.setStretchFactor(0, 1)
+        self.plot_splitter.setStretchFactor(1, 1)
+
+        # Add splitter to right panel
+        self.right_layout.addWidget(self.plot_splitter)
 
         self.splitter.addWidget(self.right_panel)
         self.splitter.setStretchFactor(0, 1)
@@ -364,7 +393,7 @@ class Ui_MainWindow(object):
 
         results = []
         print("Processing segment: ", 15)
-        metrics, fig1, fig2 = process_segment_with_figure(path, patient_num, 0)
+        metrics, fig1, fig2 = process_segment_with_figure(path, patient_num, 15)
         results.append(metrics)
         range_list = list(range(0, 14))
         range_list.extend(list(range(16, 30)))
@@ -413,7 +442,20 @@ class Ui_MainWindow(object):
         self.canvas2.show()
 
     def exportData(self):
-        print("Exporting Data")
+        print("Exporting screenshot")
+
+        filepath, _ = QtWidgets.QFileDialog.getSaveFileName(
+            self.centralwidget,
+            "Save Screenshot",
+            "",
+            "PNG files (*.png)"
+        )
+
+        if not filepath:
+            return
+
+        pixmap = self.main_window.grab()
+        pixmap.save(filepath, "PNG")
 
     def plot(self, canvas, fig):
         canvas.figure = fig

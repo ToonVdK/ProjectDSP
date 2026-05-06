@@ -1,0 +1,72 @@
+('C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+ 'jaar\\6-DSP\\ProjectDSP\\build\\application\\application.pkg',
+ {'BINARY': True,
+  'DATA': True,
+  'EXECUTABLE': True,
+  'EXTENSION': True,
+  'PYMODULE': True,
+  'PYSOURCE': True,
+  'PYZ': False,
+  'SPLASH': True,
+  'SYMLINK': False},
+ [('pyi-contents-directory _internal', '', 'OPTION'),
+  ('PYZ-00.pyz',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\build\\application\\PYZ-00.pyz',
+   'PYZ'),
+  ('struct',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\build\\application\\localpycs\\struct.pyc',
+   'PYMODULE'),
+  ('pyimod01_archive',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\build\\application\\localpycs\\pyimod01_archive.pyc',
+   'PYMODULE'),
+  ('pyimod02_importers',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\build\\application\\localpycs\\pyimod02_importers.pyc',
+   'PYMODULE'),
+  ('pyimod03_ctypes',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\build\\application\\localpycs\\pyimod03_ctypes.pyc',
+   'PYMODULE'),
+  ('pyimod04_pywin32',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\build\\application\\localpycs\\pyimod04_pywin32.pyc',
+   'PYMODULE'),
+  ('pyiboot01_bootstrap',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\venv\\Lib\\site-packages\\PyInstaller\\loader\\pyiboot01_bootstrap.py',
+   'PYSOURCE'),
+  ('pyi_rth_inspect',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_inspect.py',
+   'PYSOURCE'),
+  ('pyi_rth_pkgutil',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pkgutil.py',
+   'PYSOURCE'),
+  ('pyi_rth_multiprocessing',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_multiprocessing.py',
+   'PYSOURCE'),
+  ('pyi_rth_mplconfig',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_mplconfig.py',
+   'PYSOURCE'),
+  ('pyi_rth_pyqt6',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\venv\\Lib\\site-packages\\PyInstaller\\hooks\\rthooks\\pyi_rth_pyqt6.py',
+   'PYSOURCE'),
+  ('application',
+   'C:\\Users\\dgam3\\DocumentsOffline\\Unif\\3e '
+   'jaar\\6-DSP\\ProjectDSP\\application.py',
+   'PYSOURCE')],
+ 'python313.dll',
+ True,
+ False,
+ False,
+ [],
+ None,
+ None,
+ None)

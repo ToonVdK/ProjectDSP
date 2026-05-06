@@ -3,14 +3,24 @@ import PyQt6.QtWidgets as widget
 import PyQt6.QtGui as gui
 from PyQt6 import QtCore
 import sys
+import os
 from appWindow import Ui_MainWindow
+
+def resource_path(relative_path):
+    if hasattr(sys, '_MEIPASS'):
+        return os.path.join(sys._MEIPASS, relative_path)
+    return os.path.join(os.path.abspath("."), relative_path)
+
+icon_path = resource_path("img/icon.png")
+splash_path = resource_path("img/heartBP.png")
+
 
 app = widget.QApplication(sys.argv)
 app.setApplicationName("HeartBP")
 app.setApplicationVersion("1.0")
-app.setWindowIcon(gui.QIcon("img/icon.png"))
+app.setWindowIcon(gui.QIcon(icon_path))
 
-splash_pix = gui.QPixmap("img/heartBP.png").scaled(800, 800)
+splash_pix = gui.QPixmap(splash_path).scaled(800, 800)
 splash = widget.QSplashScreen(splash_pix, QtCore.Qt.WindowType.WindowStaysOnTopHint)
 # add fade to splashscreen
 opaqueness = 0.0

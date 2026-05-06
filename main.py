@@ -113,28 +113,24 @@ def process_segment_with_figure(dbPath, patient, idx, fs=125):
     ax3 = fig2.add_subplot(2, 2, 1)
     ax3.plot(ecg["t"], ecg["raw"], color='gray', label='Raw ECG')
     ax3.set_title("Raw ECG")
-    ax3.legend()
     ax3.grid(True)
 
     # Plot 2 (Top Right): Filtered ECG
     ax4 = fig2.add_subplot(2, 2, 2)
     ax4.plot(ecg["t"], ecg["clean"], color='blue', label='Filtered ECG')
     ax4.set_title("Filtered ECG")
-    ax4.legend()
     ax4.grid(True)
 
     # Plot 3 (Bottom Left): Raw PPG
     ax5 = fig2.add_subplot(2, 2, 3)
     ax5.plot(ppg["t"], ppg["raw"], color='gray', label='Raw PPG')
     ax5.set_title("Raw PPG")
-    ax5.legend()
     ax5.grid(True)
 
     # Plot 4 (Bottom Right): Filtered PPG
     ax6 = fig2.add_subplot(2, 2, 4)
     ax6.plot(ppg["t"], ppg["clean"], color='green', label='Filtered PPG')
     ax6.set_title("Filtered PPG")
-    ax6.legend()
     ax6.grid(True)
 
     fig2.tight_layout()
