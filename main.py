@@ -67,6 +67,7 @@ def process_segment(dbPath, patient, idx, fs=125, plot=False):
 
     return metrics
 
+
 def process_segment_with_figure(dbPath, patient, idx, fs=125):
     raw_ecg = load_signal(dbPath, patient, idx, 'ecg')
     raw_ppg = load_signal(dbPath, patient, idx, 'ppg')
@@ -84,6 +85,7 @@ def process_segment_with_figure(dbPath, patient, idx, fs=125):
     ecg_r_plot = ecg_r_peaks[ecg_r_peaks < (5.0 * fs)]
     ppg_plot = ppg_peaks[ppg_peaks < (5.0 * fs)]
 
+    # --- FIGURE 1: PEAK DETECTION ---
     fig = Figure()
     ax1 = fig.add_subplot(2, 1, 1)
     ax2 = fig.add_subplot(2, 1, 2)
@@ -101,26 +103,39 @@ def process_segment_with_figure(dbPath, patient, idx, fs=125):
 
     fig.tight_layout()
 
+    # --- FIGURE 2: PRE/POST PROCESSING (2x2 Grid) ---
     ecg = return_pre_post_processing(raw_ecg, clean_ecg, fs, "ECG")
     ppg = return_pre_post_processing(raw_ppg, clean_ppg, fs, "PPG")
 
-    fig2 = Figure()  # TODO: FIXED ISSUE HERE
-    ax3 = fig2.add_subplot(2, 1, 1)  # ECG
-    ax4 = fig2.add_subplot(2, 1, 2)  # PPG
+    fig2 = Figure(figsize=(10, 6))
 
-    # ECG plot
+    # Plot 1 (Top Left): Raw ECG
+    ax3 = fig2.add_subplot(2, 2, 1)
     ax3.plot(ecg["t"], ecg["raw"], color='gray', label='Raw ECG')
-    ax3.plot(ecg["t"], ecg["clean"], color='blue', label='Filtered ECG')
-    ax3.set_title("ECG Pre/Post Processing")
+    ax3.set_title("Raw ECG")
     ax3.legend()
     ax3.grid(True)
 
-    # PPG plot
-    ax4.plot(ppg["t"], ppg["raw"], color='gray', label='Raw PPG')
-    ax4.plot(ppg["t"], ppg["clean"], color='green', label='Filtered PPG')
-    ax4.set_title("PPG Pre/Post Processing")
+    # Plot 2 (Top Right): Filtered ECG
+    ax4 = fig2.add_subplot(2, 2, 2)
+    ax4.plot(ecg["t"], ecg["clean"], color='blue', label='Filtered ECG')
+    ax4.set_title("Filtered ECG")
     ax4.legend()
     ax4.grid(True)
+
+    # Plot 3 (Bottom Left): Raw PPG
+    ax5 = fig2.add_subplot(2, 2, 3)
+    ax5.plot(ppg["t"], ppg["raw"], color='gray', label='Raw PPG')
+    ax5.set_title("Raw PPG")
+    ax5.legend()
+    ax5.grid(True)
+
+    # Plot 4 (Bottom Right): Filtered PPG
+    ax6 = fig2.add_subplot(2, 2, 4)
+    ax6.plot(ppg["t"], ppg["clean"], color='green', label='Filtered PPG')
+    ax6.set_title("Filtered PPG")
+    ax6.legend()
+    ax6.grid(True)
 
     fig2.tight_layout()
 
