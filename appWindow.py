@@ -363,11 +363,13 @@ class Ui_MainWindow(object):
         path = os.path.dirname(filepath)
 
         results = []
-        print("Processing segment: ", 0)
+        print("Processing segment: ", 15)
         metrics, fig1, fig2 = process_segment_with_figure(path, patient_num, 0)
         results.append(metrics)
+        range_list = list(range(0, 14))
+        range_list.extend(list(range(16, 30)))
 
-        for i in range(1, 30):
+        for i in range_list:
             print("Processing segment: ", i)
             metrics = process_segment(path, patient_num, i)
             results.append(metrics)
